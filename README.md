@@ -47,3 +47,7 @@ Register Indirect Addressing uses a 16-bit register to be used as an absolute ad
 not as a seperate operand.
 
 example: `LD A, (HL)` load data at absolute address in the 16-bit HL register to the 8-bit register A
+
+#### Resource
+
+http://www.z80.info/zip/z80cpu_um.pdf (page 48)
