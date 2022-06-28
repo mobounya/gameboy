@@ -28,10 +28,18 @@ public:
 		{0x78, {A, B}}, {0x79, {A, C}}, {0x7A, {A, D}}, {0x7B, {A, E}}, {0x7C, {A, H}}, {0x7D, {A, L}}, {0x7F, {A, A}}, 
 	};
 
+	/* {0x36, [LD (HL), n]} => not included in this map!! */
+	std::map<int8_t, int8_t&> opcodes_ld_r_n {
+		{0x6, B}, {0xE, C}, 
+		{0x16, D}, {0x1E, E}, 
+		{0x26, H}, {0x2E, L}, 
+		{0x3E, A}, 
+	}; 
+
 
 	// 8-bit instructions
-	void LD_FROM_REGISTER_TO_REGISTER(int8_t &reg1, int8_t &reg2);
-	void LD_B_n();
+	void LD_REGISTER_TO_REGISTER(int8_t &reg1, int8_t &reg2);
+	void LD_IMMEDIATE_DATA_TO_REGISTER(int8_t &reg);
 	void LD_B_HL();
 	void LD_A_nn();
 
