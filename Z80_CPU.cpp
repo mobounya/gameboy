@@ -99,51 +99,12 @@ void Z80_CPU::RELATIVE_ADDR()
 	- write or read to 8-bit register A
 */
 
-void Z80_CPU::REGISTER_A(REGISTER_ACCESS_MODE type)
+void Z80_CPU::WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg)
 {
 	if (type == REGISTER_ACCESS_MODE::READ)
-		data = A;
+		data = reg;
 	else if (type == REGISTER_ACCESS_MODE::WRITE)
-		A = data;
-}
-
-/*
-	- Register addressing (F)
-	- write or read to 8-bit register F
-*/
-
-void Z80_CPU::REGISTER_F(REGISTER_ACCESS_MODE type)
-{
-	if (type == REGISTER_ACCESS_MODE::READ)
-		data = F;
-	else if (type == REGISTER_ACCESS_MODE::WRITE)
-		F = data;
-}
-
-/*
-	- Register addressing (B)
-	- write or read to 8-bit register B
-*/
-
-void Z80_CPU::REGISTER_B(REGISTER_ACCESS_MODE type)
-{
-	if (type == REGISTER_ACCESS_MODE::READ)
-		data = B;
-	else if (type == REGISTER_ACCESS_MODE::WRITE)
-		B = data;
-}
-
-/*
-	- Register addressing (C)
-	- write or read to 8-bit register C
-*/
-
-void Z80_CPU::REGISTER_C(REGISTER_ACCESS_MODE type)
-{
-	if (type == REGISTER_ACCESS_MODE::READ)
-		data = C;
-	else if (type == REGISTER_ACCESS_MODE::WRITE)
-		C = data;
+		reg = data;
 }
 
 /*
@@ -158,10 +119,10 @@ void Z80_CPU::REGISTER_C(REGISTER_ACCESS_MODE type)
 	Load to 8-bit register B from 8-bit register C
 */
 
-void Z80_CPU::LD_B_C()
+void Z80_CPU::LD_FROM_REGISTER_TO_REGISTER(int8_t &reg1, int8_t &reg2)
 {
-	REGISTER_C(REGISTER_ACCESS_MODE::READ);
-	REGISTER_B(REGISTER_ACCESS_MODE::WRITE);
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, reg2);
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, reg1);
 }
 
 /*
@@ -172,7 +133,7 @@ void Z80_CPU::LD_B_n()
 {
 	IMMEDIATE();
 	fetch();
-	REGISTER_B(REGISTER_ACCESS_MODE::WRITE);
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, B);
 }
 
 /*
@@ -183,7 +144,7 @@ void Z80_CPU::LD_B_HL()
 {
 	INDIRECT_REGISTER_HL();
 	fetch();
-	REGISTER_B(REGISTER_ACCESS_MODE::WRITE);
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, B);
 }
 
 /* 
@@ -194,5 +155,5 @@ void Z80_CPU::LD_A_nn()
 {
 	EXTENDED_ADDR();
 	fetch();
-	REGISTER_A(REGISTER_ACCESS_MODE::WRITE);
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, A);
 }
