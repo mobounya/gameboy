@@ -21,21 +21,20 @@ public:
 	};
 
 	// opcodes maps
-	std::map<int8_t, R8_R8> opcodes_ld_r_r { 
-		{0x40, {B, B}}, {0x41, {B, C}}, {0x42, {B, D}}, {0x43, {B, E}}, {0x44, {B, H}}, {0x45, {B, L}}, {0x47, {B, A}}, {0x48, {C, B}}, {0x49, {C, C}}, {0x4A, {C, D}}, {0x4B, {C, E}}, {0x4C, {C, H}}, {0x4D, {C, L}}, {0x4F, {C, A}}, 
-		{0x50, {D, B}}, {0x51, {D, C}}, {0x52, {D, D}}, {0x53, {D, E}}, {0x54, {D, H}}, {0x55, {D, L}}, {0x57, {D, A}}, {0x58, {E, B}}, {0x59, {E, C}}, {0x5A, {E, D}}, {0x5B, {E, E}}, {0x5C, {E, H}}, {0x5D, {E, L}}, {0x5F, {E, A}}, 
-		{0x60, {H, B}}, {0x61, {H, C}}, {0x62, {H, D}}, {0x63, {H, E}}, {0x64, {H, H}}, {0x65, {H, L}}, {0x67, {H, A}}, {0x68, {L, B}}, {0x69, {L, C}}, {0x6A, {L, D}}, {0x6B, {L, E}}, {0x6C, {L, H}}, {0x6D, {L, L}}, {0x6F, {L, A}}, 
-		{0x78, {A, B}}, {0x79, {A, C}}, {0x7A, {A, D}}, {0x7B, {A, E}}, {0x7C, {A, H}}, {0x7D, {A, L}}, {0x7F, {A, A}}, 
+	std::map<int8_t, R8_R8> opcodes_ld_r_r  { 
+		{0x40, {BC.hi, BC.hi}}, {0x41, {BC.hi, BC.lo}}, {0x42, {BC.hi, DE.hi}}, {0x43, {BC.hi, DE.lo}}, {0x44, {BC.hi, HL.hi}}, {0x45, {BC.hi, HL.lo}}, {0x47, {BC.hi, AF.hi}}, {0x48, {BC.lo, BC.hi}}, {0x49, {BC.lo, BC.lo}}, {0x4A, {BC.lo, DE.hi}}, {0x4B, {BC.lo, DE.lo}}, {0x4C, {BC.lo, HL.hi}}, {0x4D, {BC.lo, HL.lo}}, {0x4F, {BC.lo, AF.hi}}, 
+		{0x50, {DE.hi, BC.hi}}, {0x51, {DE.hi, BC.lo}}, {0x52, {DE.hi, DE.hi}}, {0x53, {DE.hi, DE.lo}}, {0x54, {DE.hi, HL.hi}}, {0x55, {DE.hi, HL.lo}}, {0x57, {DE.hi, AF.hi}}, {0x58, {DE.lo, BC.hi}}, {0x59, {DE.lo, BC.lo}}, {0x5A, {DE.lo, DE.hi}}, {0x5B, {DE.lo, DE.lo}}, {0x5C, {DE.lo, HL.hi}}, {0x5D, {DE.lo, HL.lo}}, {0x5F, {DE.lo, AF.hi}}, 
+		{0x60, {HL.hi, BC.hi}}, {0x61, {HL.hi, BC.lo}}, {0x62, {HL.hi, DE.hi}}, {0x63, {HL.hi, DE.lo}}, {0x64, {HL.hi, HL.hi}}, {0x65, {HL.hi, HL.lo}}, {0x67, {HL.hi, AF.hi}}, {0x68, {HL.lo, BC.hi}}, {0x69, {HL.lo, BC.lo}}, {0x6A, {HL.lo, DE.hi}}, {0x6B, {HL.lo, DE.lo}}, {0x6C, {HL.lo, HL.hi}}, {0x6D, {HL.lo, HL.lo}}, {0x6F, {HL.lo, AF.hi}}, 
+		{0x78, {AF.hi, BC.hi}}, {0x79, {AF.hi, BC.lo}}, {0x7A, {AF.hi, DE.hi}}, {0x7B, {AF.hi, DE.lo}}, {0x7C, {AF.hi, HL.hi}}, {0x7D, {AF.hi, HL.lo}}, {0x7F, {AF.hi, AF.hi}}, 
 	};
 
 	/* {0x36, [LD (HL), n]} => not included in this map!! */
-	std::map<int8_t, int8_t&> opcodes_ld_r_n {
-		{0x6, B}, {0xE, C}, 
-		{0x16, D}, {0x1E, E}, 
-		{0x26, H}, {0x2E, L}, 
-		{0x3E, A}, 
-	}; 
-
+	std::map<int8_t, int8_t &> opcodes_ld_r_n {
+		{0x6, BC.hi}, {0xE, BC.lo}, 
+		{0x16, DE.hi}, {0x1E, DE.lo}, 
+		{0x26, HL.hi}, {0x2E, HL.lo}, 
+		{0x3E, AF.hi}, 
+	};
 
 	// 8-bit instructions
 	void LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2);
@@ -64,21 +63,27 @@ public:
 	void RELATIVE_ADDR();
 	void WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg);
 
+	union REG
+	{
+		struct
+		{	
+			int8_t hi;
+			int8_t lo;
+		};
+		int16_t value;
+	};
+
     // Registers
-	int8_t A = 0x00; // A = Accumulator
-	int8_t F = 0x00; // F = flags
+	REG AF;
 
-	int8_t B = 0x00;
-	int8_t C = 0x00;
+	REG BC;
 
-	int8_t D = 0x00;
-	int8_t E = 0x00;
+	REG DE;
 
-	int8_t H = 0x00;
-	int8_t L = 0x00;
+	REG HL;
 
-	int16_t SP = 0x00; // Stack Pointer
-	int16_t PC = 0x00; // Program Counter/Pointer
+	REG SP; // stack pointer
+	REG PC; // Program Counter/Pointer
 
 	int16_t abs_addr = 0x00;
 	int8_t  rel_addr = 0x00;
