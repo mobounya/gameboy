@@ -38,8 +38,8 @@ public:
 
 
 	// 8-bit instructions
-	void LD_REGISTER_TO_REGISTER(int8_t &reg1, int8_t &reg2);
-	void LD_IMMEDIATE_DATA_TO_REGISTER(int8_t &reg);
+	void LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2);
+	void LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg);
 	void LD_B_HL();
 	void LD_A_nn();
 
