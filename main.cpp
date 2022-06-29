@@ -17,6 +17,22 @@ void print_registers(Z80_CPU cpu)
     std::cout << std::endl;
 }
 
+bool exec_opcode(Z80_CPU cpu, int opcode) {
+    auto search_r_r = cpu.opcodes_ld_r_r.find(opcode);
+    if (search_r_r != cpu.opcodes_ld_r_r.end()) {
+        std::cout << "Hello From REGISTER TO REGISTER" << std::endl;
+        cpu.LD_8BIT_REGISTER_TO_8BIT_REGISTER((search_r_r->second).reg1, (search_r_r->second).reg2);
+        return true;
+    }
+    auto search_r_n = cpu.opcodes_ld_r_n.find(opcode);
+    if (search_r_n != cpu.opcodes_ld_r_n.end()) {
+        std::cout << "Hello From IMMEDIATE DATA TO REGISTER" << std::endl;
+        cpu.LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(search_r_n->second);
+        return true;
+    }
+    return false;
+}
+
 int main(void)
 {
     Z80_CPU cpu;
@@ -36,12 +52,8 @@ int main(void)
         std::cin >> std::hex >> opcode;
         std::cout << std::endl;
         std::cout << "Opcode entered: " << opcode << std::endl;
-        auto search = cpu.opcodes_ld_r_r.find(opcode);
-        if (search != cpu.opcodes_ld_r_r.end()) {
-            std::cout << "Hello" << std::endl;
-            cpu.LD_FROM_REGISTER_TO_REGISTER((search->second).reg1, (search->second).reg2);
-            print_registers(cpu);
-        } else {
+        
+        if (!exec_opcode(cpu, opcode)){
             std::cout << "Not implemented yet!!!" << std::endl;
         }
     }
