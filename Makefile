@@ -11,7 +11,10 @@ FLAGS = -std=c++11
 all : $(NAME)
 
 $(NAME) : $(OBJ) $(HEADERS)
-	g++ -std=c++11 $(OBJ) -o $(NAME)
+	g++ $(FLAGS) $(OBJ) -o $(NAME)
+
+test:
+	make -C ./tests
 
 %.o : %.cpp $(HEADERS)
 	g++ $(FLAGS) -c $< -o $@
