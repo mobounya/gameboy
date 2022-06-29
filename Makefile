@@ -11,7 +11,10 @@ FLAGS = -std=c++11
 all : $(NAME)
 
 $(NAME) : $(OBJ) $(HEADERS)
-	g++ -std=c++11 $(OBJ) -o $(NAME)
+	g++ $(FLAGS) $(OBJ) -o $(NAME)
+
+test:
+	make -C ./tests
 
 %.o : %.cpp $(HEADERS)
 	g++ $(FLAGS) -c $< -o $@
@@ -20,8 +23,10 @@ re: fclean all
 
 clean:
 	rm -f $(OBJ)
+	make clean -C ./tests
 
 fclean: clean
 	rm -f $(NAME)
+	make fclean -C ./tests
 
 .PHONY: all clean fclean re
