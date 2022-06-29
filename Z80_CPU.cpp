@@ -3,6 +3,13 @@
 Z80_CPU::Z80_CPU(void)
 {
 	ram.fill(69);
+
+	AF.value = 0x00;
+	BC.value = 0x00;
+	DE.value = 0x00;
+	HL.value = 0x00;
+	SP.value = 0x00;
+	PC.value = 0x00;
 }
 
 Z80_CPU::~Z80_CPU(void)
@@ -39,8 +46,8 @@ void Z80_CPU::write(int16_t address, int8_t data)
 
 void Z80_CPU::IMMEDIATE()
 {
-	abs_addr = PC;
-	PC++;
+	abs_addr = PC.value;
+	PC.value++;
 }
 
 /*
@@ -50,8 +57,7 @@ void Z80_CPU::IMMEDIATE()
 
 void Z80_CPU::INDIRECT_REGISTER_HL()
 {
-	abs_addr = (int16_t)0 | H << 8;
-	abs_addr = abs_addr | L;
+	abs_addr = HL.value;
 }
 
 /*
@@ -61,8 +67,7 @@ void Z80_CPU::INDIRECT_REGISTER_HL()
 
 void Z80_CPU::INDIRECT_REGISTER_DE()
 {
-	abs_addr = (int16_t)0 | D << 8;
-	abs_addr = abs_addr | E;
+	abs_addr = DE.value;
 }
 
 /*
@@ -75,12 +80,12 @@ void Z80_CPU::EXTENDED_ADDR()
 	int8_t hi;
 	int8_t lo;
 
-	hi = read(PC);
-	PC++;
-	lo = read(PC);
-	PC++;
+	hi = read(PC.value);
+	PC.value++;
+	lo = read(PC.value);
+	PC.value++;
 
-	abs_addr = hi << 8 | lo;
+	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
 }
 
 /*
@@ -90,8 +95,8 @@ void Z80_CPU::EXTENDED_ADDR()
 
 void Z80_CPU::RELATIVE_ADDR()
 {
-	rel_addr = read(PC);
-	PC++;
+	rel_addr = read(PC.value);
+	PC.value++;
 }
 
 /*
@@ -144,10 +149,10 @@ void Z80_CPU::LD_B_HL()
 {
 	INDIRECT_REGISTER_HL();
 	fetch();
-	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, B);
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, BC.hi);
 }
 
-/* 
+/*
 	Load to 8-bit register data from absolute address in the next two bytes in the instruction
 */
 
@@ -155,5 +160,5 @@ void Z80_CPU::LD_A_nn()
 {
 	EXTENDED_ADDR();
 	fetch();
-	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, A);
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
 }
