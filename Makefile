@@ -23,8 +23,10 @@ re: fclean all
 
 clean:
 	rm -f $(OBJ)
+	make clean -C ./tests
 
 fclean: clean
 	rm -f $(NAME)
+	make fclean -C ./tests
 
 .PHONY: all clean fclean re

@@ -116,7 +116,7 @@ void Z80_CPU::WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg)
 */
 
 /*
-	Load to 8-bit register B from 8-bit register C
+	Load to 8-bit register from another 8-bit register.
 */
 
 void Z80_CPU::LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2)
@@ -126,7 +126,7 @@ void Z80_CPU::LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2)
 }
 
 /*
-	Load to 8-bit register B from immediate data n
+	Load to 8-bit register 8-bit immediate data. 
 */
 
 void Z80_CPU::LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg)
