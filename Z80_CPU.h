@@ -13,7 +13,7 @@ class Z80_CPU
 public:
     Z80_CPU();
     ~Z80_CPU();
-	typedef void(Z80_CPU::*instruction)(void);
+	typedef void (Z80_CPU::*instruction)(void);
 
 	// opcodes stucts
 	struct R8_R8 {

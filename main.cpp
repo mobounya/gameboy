@@ -45,7 +45,7 @@ bool exec_opcode(Z80_CPU cpu, int opcode) {
     auto search_others = cpu.opcodes_others.find(opcode);
     if (search_others != cpu.opcodes_others.end()) {
         std::cout << "Hello From OTHER OPCODES" << std::endl;
-        //(*search_others->second)();
+        (cpu.*search_others->second)();
         return true;
     }
     return false;
