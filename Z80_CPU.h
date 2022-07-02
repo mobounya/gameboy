@@ -13,7 +13,8 @@ class Z80_CPU
 public:
     Z80_CPU();
     ~Z80_CPU();
-	
+	typedef void(Z80_CPU::*instruction)(void);
+
 	// opcodes stucts
 	struct R8_R8 {
 		int8_t	&reg1;
@@ -42,10 +43,15 @@ public:
 		{0x77, AF.hi},
 	};
 
+	std::map<int8_t, const instruction> others {
+		{0x36, &Z80_CPU::LD_8BIT_IMMEDIATE_DATA_TO_ABS_ADDR_IN_HL},
+	};
+
 	// 8-bit instructions
 	void LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2);
 	void LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg);
-	void LD_8BIT_REGISTER_TO_ABS_ADDR_FROM_HL(int8_t &reg);
+	void LD_8BIT_REGISTER_TO_ABS_ADDR_IN_HL(int8_t &reg);
+	void LD_8BIT_IMMEDIATE_DATA_TO_ABS_ADDR_IN_HL(void);
 	void LD_B_HL();
 	void LD_A_nn();
 
