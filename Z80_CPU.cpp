@@ -168,13 +168,6 @@ void Z80_CPU::LD_r_ABS_HL(int8_t &reg)
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, reg);
 }
 
-void Z80_CPU::LD_A_ABS_DE(void)
-{
-	INDIRECT_REGISTER_DE();
-	fetch();
-	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
-}
-
 /*
 	Instruction: LD (HL), r
 	Description: Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register r
@@ -211,6 +204,19 @@ void Z80_CPU::LD_ABS_HL_n(void)
 void Z80_CPU::LD_A_ABS_BC(void)
 {
 	INDIRECT_REGISTER_BC();
+	fetch();
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
+}
+
+/*
+	Instruction: LD A, (DE)
+	Description: Load to the 8-bit A register, data from the absolute address specified by the 16-bit register (DE).
+	Opcode: 0b00001010
+*/
+
+void Z80_CPU::LD_A_ABS_DE(void)
+{
+	INDIRECT_REGISTER_DE();
 	fetch();
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
 }
