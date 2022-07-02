@@ -141,22 +141,26 @@ void Z80_CPU::LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg)
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, reg);
 }
 
+/*
+	Load to the 8-bit register r, data from the absolute address specified by the 16-bit register HL.
+*/
+
+void Z80_CPU::LD_ABS_ADDR_FROM_HL_TO_8BIT_REGISTER(int8_t &reg)
+{
+	INDIRECT_REGISTER_HL();
+	fetch();
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, reg);
+}
+
+/*
+	Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register r.
+*/
+
 void Z80_CPU::LD_8BIT_REGISTER_TO_ABS_ADDR_FROM_HL(int8_t &reg)
 {
 	INDIRECT_REGISTER_HL();
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, reg);
 	write(abs_addr, data);
-}
-
-/*
-	Load to 8-bit register B from absolute address in (HL)
-*/
-
-void Z80_CPU::LD_B_HL()
-{
-	INDIRECT_REGISTER_HL();
-	fetch();
-	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, BC.hi);
 }
 
 /*

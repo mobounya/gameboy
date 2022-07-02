@@ -30,6 +30,18 @@ bool exec_opcode(Z80_CPU cpu, int opcode) {
         cpu.LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(search_r_n->second);
         return true;
     }
+    auto search_r_hl = cpu.opcodes_ld_r_hl.find(opcode);
+    if (search_r_hl != cpu.opcodes_ld_r_hl.end()) {
+        std::cout << "Hello From ABS HL TO REGISTER" << std::endl;
+        cpu.LD_ABS_ADDR_FROM_HL_TO_8BIT_REGISTER(search_r_hl->second);
+        return true;
+    }
+    auto search_hl_r = cpu.opcodes_ld_hl_r.find(opcode);
+    if (search_hl_r != cpu.opcodes_ld_hl_r.end()) {
+        std::cout << "Hello From REGISTER TO ABS HL" << std::endl;
+        cpu.LD_8BIT_REGISTER_TO_ABS_ADDR_FROM_HL(search_hl_r->second);
+        return true;
+    }
     return false;
 }
 

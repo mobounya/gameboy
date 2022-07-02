@@ -35,6 +35,13 @@ public:
 		{0x3E, AF.hi}, 
 	};
 
+	std::map<int8_t, int8_t &> opcodes_ld_r_hl {
+		{0x46, BC.hi}, {0x4E, BC.lo},
+		{0x56, DE.hi}, {0x5E, DE.lo},
+		{0x66, HL.hi}, {0x6E, HL.lo},
+		{0x7E, AF.hi},
+	};
+
 	std::map<int8_t, int8_t &> opcodes_ld_hl_r {
 		{0x70, BC.hi}, {0x71, BC.lo},
 		{0x72, DE.hi}, {0x73, DE.lo},
@@ -45,8 +52,8 @@ public:
 	// 8-bit instructions
 	void LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2);
 	void LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg);
+	void LD_ABS_ADDR_FROM_HL_TO_8BIT_REGISTER(int8_t &reg);
 	void LD_8BIT_REGISTER_TO_ABS_ADDR_FROM_HL(int8_t &reg);
-	void LD_B_HL();
 	void LD_A_nn();
 
 	// Helpers
