@@ -51,7 +51,7 @@ public:
 	};
 
 	std::map<int8_t, const instruction> opcodes_others {
-		{0x36, &Z80_CPU::LD_ABS_HL_n},
+		{0x36, &Z80_CPU::LD_ABS_HL_n}, {0x0A, &Z80_CPU::LD_A_ABS_BC}
 	};
 
 	// 8-bit instructions
@@ -60,6 +60,7 @@ public:
 	void LD_r_ABS_HL(int8_t &reg);
 	void LD_ABS_HL_r(int8_t &reg);
 	void LD_ABS_HL_n(void);
+	void LD_A_ABS_BC(void);
 
 	void LD_A_nn();
 
@@ -82,6 +83,7 @@ public:
 	void INDIRECT_REGISTER_DE();
 	void EXTENDED_ADDR();
 	void RELATIVE_ADDR();
+	void INDIRECT_REGISTER_BC();
 	void WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg);
 
 	union REG
