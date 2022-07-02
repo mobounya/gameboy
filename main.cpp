@@ -21,25 +21,25 @@ bool exec_opcode(Z80_CPU cpu, int opcode) {
     auto search_r_r = cpu.opcodes_ld_r_r.find(opcode);
     if (search_r_r != cpu.opcodes_ld_r_r.end()) {
         std::cout << "Hello From REGISTER TO REGISTER" << std::endl;
-        cpu.LD_8BIT_REGISTER_TO_8BIT_REGISTER((search_r_r->second).reg1, (search_r_r->second).reg2);
+        cpu.LD_r_r((search_r_r->second).reg1, (search_r_r->second).reg2);
         return true;
     }
     auto search_r_n = cpu.opcodes_ld_r_n.find(opcode);
     if (search_r_n != cpu.opcodes_ld_r_n.end()) {
         std::cout << "Hello From IMMEDIATE DATA TO REGISTER" << std::endl;
-        cpu.LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(search_r_n->second);
+        cpu.LD_r_n(search_r_n->second);
         return true;
     }
     auto search_r_hl = cpu.opcodes_ld_r_hl.find(opcode);
     if (search_r_hl != cpu.opcodes_ld_r_hl.end()) {
         std::cout << "Hello From ABS HL TO REGISTER" << std::endl;
-        cpu.LD_ABS_ADDR_IN_HL_TO_8BIT_REGISTER(search_r_hl->second);
+        cpu.LD_r_ABS_HL(search_r_hl->second);
         return true;
     }
     auto search_hl_r = cpu.opcodes_ld_hl_r.find(opcode);
     if (search_hl_r != cpu.opcodes_ld_hl_r.end()) {
         std::cout << "Hello From REGISTER TO ABS HL" << std::endl;
-        cpu.LD_8BIT_REGISTER_TO_ABS_ADDR_IN_HL(search_hl_r->second);
+        cpu.LD_ABS_HL_r(search_hl_r->second);
         return true;
     }
     auto search_others = cpu.opcodes_others.find(opcode);

@@ -51,15 +51,16 @@ public:
 	};
 
 	std::map<int8_t, const instruction> opcodes_others {
-		{0x36, &Z80_CPU::LD_8BIT_IMMEDIATE_DATA_TO_ABS_ADDR_IN_HL},
+		{0x36, &Z80_CPU::LD_ABS_HL_n},
 	};
 
 	// 8-bit instructions
-	void LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2);
-	void LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg);
-	void LD_ABS_ADDR_IN_HL_TO_8BIT_REGISTER(int8_t &reg);
-	void LD_8BIT_REGISTER_TO_ABS_ADDR_IN_HL(int8_t &reg);
-	void LD_8BIT_IMMEDIATE_DATA_TO_ABS_ADDR_IN_HL(void);
+	void LD_r_r(int8_t &reg1, int8_t &reg2);
+	void LD_r_n(int8_t &reg);
+	void LD_r_ABS_HL(int8_t &reg);
+	void LD_ABS_HL_r(int8_t &reg);
+	void LD_ABS_HL_n(void);
+
 	void LD_A_nn();
 
 	// Helpers
