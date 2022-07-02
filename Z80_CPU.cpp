@@ -71,6 +71,16 @@ void Z80_CPU::INDIRECT_REGISTER_DE()
 }
 
 /*
+	- Register Indirect Addressing (BC)
+	- 16-bit absolute address is in 16-bit register BC.
+*/
+
+void Z80_CPU::INDIRECT_REGISTER_BC()
+{
+	abs_addr = BC.value;
+}
+
+/*
 	- Extended addressing
 	- 16-bit absolute address is provided in the next two bytes of the instruction
 */
@@ -185,6 +195,18 @@ void Z80_CPU::LD_ABS_HL_n(void)
 	write(abs_addr, data);
 }
 
+/*
+	Instruction: LD A, (BC)
+	Description: Load to the 8-bit A register, data from the absolute address specified by the 16-bit register BC.
+	Opcode: 0b00001010
+*/
+
+void Z80_CPU::LD_A_ABS_BC(void)
+{
+	INDIRECT_REGISTER_BC();
+	fetch();
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
+}
 
 /*
 	Load to 8-bit register data from absolute address in the next two bytes in the instruction
