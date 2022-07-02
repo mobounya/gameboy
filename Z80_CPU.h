@@ -51,7 +51,8 @@ public:
 	};
 
 	std::map<int8_t, const instruction> opcodes_others {
-		{0x36, &Z80_CPU::LD_ABS_HL_n}, {0x0A, &Z80_CPU::LD_A_ABS_BC}
+		{0x36, &Z80_CPU::LD_ABS_HL_n}, {0x0A, &Z80_CPU::LD_A_ABS_BC},
+		{0x1A, &Z80_CPU::LD_A_ABS_DE}
 	};
 
 	// 8-bit instructions
