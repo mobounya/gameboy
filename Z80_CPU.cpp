@@ -166,8 +166,8 @@ void Z80_CPU::LD_r_ABS_HL(int8_t &reg)
 
 void Z80_CPU::LD_ABS_HL_r(int8_t &reg)
 {
-	INDIRECT_REGISTER_HL();
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, reg);
+	INDIRECT_REGISTER_HL();
 	write(abs_addr, data);
 }
 
@@ -181,7 +181,8 @@ void Z80_CPU::LD_ABS_HL_n(void)
 {
 	IMMEDIATE();
 	fetch();
-	write(HL.value, data);
+	INDIRECT_REGISTER_HL();
+	write(abs_addr, data);
 }
 
 
