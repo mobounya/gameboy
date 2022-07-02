@@ -211,7 +211,7 @@ void Z80_CPU::LD_A_ABS_BC(void)
 /*
 	Instruction: LD A, (DE)
 	Description: Load to the 8-bit A register, data from the absolute address specified by the 16-bit register (DE).
-	Opcode: 0b00001010
+	Opcode: 0b00011010
 */
 
 void Z80_CPU::LD_A_ABS_DE(void)
