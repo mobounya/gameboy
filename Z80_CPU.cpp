@@ -131,7 +131,7 @@ void Z80_CPU::LD_8BIT_REGISTER_TO_8BIT_REGISTER(int8_t &reg1, int8_t &reg2)
 }
 
 /*
-	Load to 8-bit register 8-bit immediate data. 
+	Load 8-bit immediate data to 8-bit register. 
 */
 
 void Z80_CPU::LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg)
@@ -139,6 +139,28 @@ void Z80_CPU::LD_IMMEDIATE_8BIT_DATA_TO_8BIT_REGISTER(int8_t &reg)
 	IMMEDIATE();
 	fetch();
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, reg);
+}
+
+/* 
+	Load 8-bit data in 8-bit register to absolute address in (HL)
+*/
+
+void Z80_CPU::LD_8BIT_REGISTER_TO_ABS_ADDR_IN_HL(int8_t &reg)
+{
+	INDIRECT_REGISTER_HL();
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, reg);
+	write(abs_addr, data);
+}
+
+/* 
+	Load 8-bit immediate data to absolute address in HL.
+*/
+
+void Z80_CPU::LD_8BIT_IMMEDIATE_DATA_TO_ABS_ADDR_IN_HL(void)
+{
+	IMMEDIATE();
+	fetch();
+	write(HL.value, data);
 }
 
 /*
