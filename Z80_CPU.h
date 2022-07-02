@@ -61,6 +61,7 @@ public:
 	void LD_ABS_HL_r(int8_t &reg);
 	void LD_ABS_HL_n(void);
 	void LD_A_ABS_BC(void);
+	void LD_A_ABS_DE(void);
 
 	void LD_A_nn();
 
