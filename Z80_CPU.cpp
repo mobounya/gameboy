@@ -222,6 +222,32 @@ void Z80_CPU::LD_A_ABS_DE(void)
 }
 
 /*
+	Instruction: LD (BC), A
+	Description: Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register
+	Opcode: 0b00000010
+*/
+
+void Z80_CPU::LD_ABS_BC_A(void)
+{
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
+	INDIRECT_REGISTER_BC();
+	write(abs_addr, data);
+}
+
+/*
+	Instruction: LD (DE), A
+	Description: Load to the absolute address specified by the 16-bit register DE, data from the 8-bit A register
+	Opcode: 0b00010010
+*/
+
+void Z80_CPU::LD_ABS_DE_A(void)
+{
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
+	INDIRECT_REGISTER_DE();
+	write(abs_addr, data);
+}
+
+/*
 	Load to 8-bit register data from absolute address in the next two bytes in the instruction
 */
 
