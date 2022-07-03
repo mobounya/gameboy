@@ -9,27 +9,40 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include "BUS.h"
+#include "UNITS.h"
 
-class CARTIDGE
+class CARTIDGE : public BUS_DEVICE
 {
 public:
     CARTIDGE(std::string filename);
     ~CARTIDGE();
+
+    void busWrite(uint16_t addr, int8_t data);
+    int8_t busRead(uint16_t addr);
+
+    class MBC
+    {
+        /*
+        ** basically MBC will keep track of which banks are active
+        **  and will return real offset into CARTIDGE Memory
+        */
+    public:
+        virtual int getRealRead(uint16_t addr);
+        virtual int getRealWrite(uint16_t addr, int8_t data);
+
+    private:
+        uint ramSize;
+        uint romSize;
+    };
 
     struct HEADER
     {
         uint8_t paddding[0x100];
         uint8_t entryPoint[0x4];
         uint8_t nintendoLogo[0x30];
-        // union
-        // {
-        // uint8_t oldTitle[0xf];
-        // struct
-        // {
         uint8_t newTitle[0xb];
         uint8_t manufCode[0x4];
-        // } __attribute__((packed));
-        // };
         uint8_t gcbFlag;
         uint8_t licenseCode[0x2];
         uint8_t sgbFlag;
@@ -47,6 +60,13 @@ public:
 
 private:
     HEADER header;
+    MBC *Controller;
+    uint ramSize;
+    uint romSize;
+    uint8_t *MEM;
+    bool parseHeader(void);
+    bool allocateMemory(void);
+    MBC *initMBC(void);
 };
 
 #endif

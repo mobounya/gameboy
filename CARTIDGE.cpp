@@ -1,4 +1,5 @@
 #include "CARTIDGE.h"
+#include "NOMBC.h"
 
 CARTIDGE::CARTIDGE(std::string filename)
 {
@@ -7,10 +8,76 @@ CARTIDGE::CARTIDGE(std::string filename)
     file.open(filename);
     file.read((char *)&this->header, sizeof(CARTIDGE::HEADER));
     file.close();
+
+    this->parseHeader();
+    this->allocateMemory();
+    this->initMBC();
 }
 
-CARTIDGE::~CARTIDGE()
+CARTIDGE::~CARTIDGE(void)
 {
+    delete[] this->MEM;
+    delete this->Controller;
+}
+
+void CARTIDGE::busWrite(uint16_t addr, int8_t data)
+{
+}
+
+int8_t CARTIDGE::busRead(uint16_t addr)
+{
+    return (0x96);
+}
+
+bool CARTIDGE::allocateMemory(void)
+{
+    this->MEM = new uint8_t[this->ramSize + this->romSize];
+    return (true);
+}
+
+CARTIDGE::MBC *CARTIDGE::initMBC(void)
+{
+    // Here we should check what type of MBC then use correct class
+    return new NOMBC();
+}
+
+/*
+** PARSING TOOLS
+*/
+
+static uint getRomSize(uint8_t id)
+{
+    if (id < 8)
+        return (ROM_BANK << id);
+    else if (id > 51 && id < 55)
+        return (MB + ROM_BANK << (id - 50));
+    return (ROM_BANK);
+}
+
+static uint getRamSize(uint8_t id)
+{
+    switch (id)
+    {
+    case 1:
+        return (2 * KB);
+    case 2:
+        return (8 * KB);
+    case 3:
+        return (32 * KB);
+    case 4:
+        return (128 * KB);
+    case 5:
+        return (64 * KB);
+    default:
+        return (0);
+    }
+}
+
+bool CARTIDGE::parseHeader(void)
+{
+    this->romSize = getRomSize(this->header.ROMSize);
+    this->ramSize = getRamSize(this->header.RAMSize);
+    return (true);
 }
 
 /*
@@ -94,7 +161,7 @@ static std::string getCartidgeTypeCode(uint8_t type)
     }
 }
 
-static std::string getRomSize(int8_t size)
+static std::string getRomSizeDesc(int8_t size)
 {
     switch (size)
     {
@@ -127,7 +194,7 @@ static std::string getRomSize(int8_t size)
     }
 }
 
-static std::string getRamSize(int8_t size)
+static std::string getRamSizeDesc(int8_t size)
 {
     switch (size)
     {
@@ -184,8 +251,8 @@ void CARTIDGE::debugPrintDetails(void)
     printf("NEW LICENSE CODE:\n\t%2.2X%2.2X\n", header.licenseCode[0], header.licenseCode[1]);
     printf("SGB Flag:\n\t%2.2X %s\n", header.sgbFlag, header.sgbFlag == 0x03 ? "(ASupports SGB functions)" : "");
     printf("CARTIDGE TYPE:\n\t%2.2X (%s)\n", header.cartidgeType, getCartidgeTypeCode(header.cartidgeType).c_str());
-    printf("ROM SIZE:\n\t%2.2X [%s]\n", header.ROMSize, getRomSize(header.ROMSize).c_str());
-    printf("RAM SIZE:\n\t%2.2X [%s]\n", header.RAMSize, getRamSize(header.RAMSize).c_str());
+    printf("ROM SIZE:\n\t%2.2X [%s]\n", header.ROMSize, getRomSizeDesc(header.ROMSize).c_str());
+    printf("RAM SIZE:\n\t%2.2X [%s]\n", header.RAMSize, getRamSizeDesc(header.RAMSize).c_str());
     printf("DESTINATION CODE:\n\t%2.2X", header.destinationCode);
     if (header.destinationCode == 0x0)
         printf(" [Japanese]\n");
@@ -204,4 +271,7 @@ void CARTIDGE::debugPrintDetails(void)
     else
         printf("[KO = %2.2X]\n", hSum);
     printf("GLOBAL CHECKSUM:\n\t%4.4x\n", header.globalChecksum);
+    printf("=================== PRIVATE PROPS ==================\n");
+    printf("ROMSize : %u\n", this->romSize);
+    printf("RAMSize : %u\n", this->ramSize);
 }
