@@ -66,7 +66,9 @@ public:
 	void LD_A_ABS_DE(void);
 	void LD_ABS_BC_A(void);
 	void LD_ABS_DE_A(void);
-
+	void LD_A_ABS_nn(void);
+	void LD_ABS_nn_A(void);
+	
 	void LD_A_nn();
 
 	// Helpers
