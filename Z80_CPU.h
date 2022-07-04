@@ -54,7 +54,9 @@ public:
 		{0x36, &Z80_CPU::LD_ABS_HL_n}, {0x0A, &Z80_CPU::LD_A_ABS_BC},
 		{0x1A, &Z80_CPU::LD_A_ABS_DE}, {0x02, &Z80_CPU::LD_ABS_BC_A},
 		{0x12, &Z80_CPU::LD_ABS_DE_A}, {0xFA, &Z80_CPU::LD_A_ABS_nn},
-		{0xEA, &Z80_CPU::LD_ABS_nn_A},
+		{0xEA, &Z80_CPU::LD_ABS_nn_A}, {0xF2, &Z80_CPU::LDH_A_ABS_C},
+		{0xE2, &Z80_CPU::LDH_ABS_C_A}, {0xF0, &Z80_CPU::LDH_A_ABS_n},
+		{0xE0, &Z80_CPU::LDH_ABS_n_A},
 	};
 
 	// 8-bit instructions
@@ -69,9 +71,11 @@ public:
 	void LD_ABS_DE_A(void);
 	void LD_A_ABS_nn(void);
 	void LD_ABS_nn_A(void);
+	void LDH_A_ABS_C(void);
+	void LDH_ABS_C_A(void);
+	void LDH_A_ABS_n(void);
+	void LDH_ABS_n_A(void);
 	
-	void LD_A_nn();
-
 	// Helpers
 	void fetch();
 
@@ -87,11 +91,13 @@ public:
 
 	// Addressing Modes
 	void IMMEDIATE();
+	void INDIRECT_IMMEDIATE();
 	void EXTENDED_ADDR();
 	void RELATIVE_ADDR();
 	void INDIRECT_REGISTER_HL();
 	void INDIRECT_REGISTER_DE();
 	void INDIRECT_REGISTER_BC();
+	void INDIRECT_REGISTER_C();
 	void WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg);
 
 	union REG
