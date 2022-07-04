@@ -90,9 +90,9 @@ void Z80_CPU::EXTENDED_ADDR()
 	int8_t hi;
 	int8_t lo;
 
-	hi = read(PC.value);
-	PC.value++;
 	lo = read(PC.value);
+	PC.value++;
+	hi = read(PC.value);
 	PC.value++;
 
 	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
@@ -253,7 +253,7 @@ void Z80_CPU::LD_ABS_DE_A(void)
 	Opcode: 0b11111010
 */
 
-void LD_A_ABS_nn(void)
+void Z80_CPU::LD_A_ABS_nn(void)
 {
 	EXTENDED_ADDR();
 	fetch();
@@ -266,7 +266,7 @@ void LD_A_ABS_nn(void)
 	Opcode: 0b11101010
 */
 
-void LD_ABS_nn_A(void)
+void Z80_CPU::LD_ABS_nn_A(void)
 {
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
 	EXTENDED_ADDR();
