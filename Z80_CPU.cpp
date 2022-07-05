@@ -22,6 +22,13 @@ void Z80_CPU::fetch()
 	data = read(abs_addr);
 }
 
+void Z80_CPU::set_msb_max_to_abs_addr(int8_t value)
+{
+	int8_t hi = 0xFF;
+	int8_t lo = value;
+	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
+}
+
 // Totally going to return content of address
 int8_t Z80_CPU::read(int16_t address)
 {
@@ -48,20 +55,6 @@ void Z80_CPU::IMMEDIATE()
 {
 	abs_addr = PC.value;
 	PC.value++;
-}
-
-/*
-	- Indirect Immediate addressing
-	- 16-bit absolute address is obtained by setting the most significant byte to 0xFF 
-	and the least significant byte to the value of the next byte in the instruction.
-*/
-
-void Z80_CPU::INDIRECT_IMMEDIATE()
-{
-	int8_t hi = 0xFF;
-	int8_t lo = PC.value++;
-
-	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
 }
 
 /*
@@ -92,19 +85,6 @@ void Z80_CPU::INDIRECT_REGISTER_DE()
 void Z80_CPU::INDIRECT_REGISTER_BC()
 {
 	abs_addr = BC.value;
-}
-
-/*
-	- Register Indirect Addressing (C)
-	- 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the least significant byte to the value of C.
-*/
-
-void Z80_CPU::INDIRECT_REGISTER_C()
-{
-	int8_t hi = 0xFF;
-	int8_t lo = BC.lo;
-
-	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
 }
 
 /*
@@ -310,7 +290,7 @@ so the possible range is 0xFF00-0xFFFF.
 */
 void Z80_CPU::LDH_A_ABS_C(void)
 {
-	INDIRECT_REGISTER_C();
+	set_msb_max_to_abs_addr(BC.lo);
 	fetch();
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
 }
@@ -326,7 +306,7 @@ so the possible range is 0xFF00-0xFFFF.
 void Z80_CPU::LDH_ABS_C_A(void)
 {
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
-	INDIRECT_REGISTER_C();
+	set_msb_max_to_abs_addr(BC.lo);
 	write(abs_addr, data);
 }
 
@@ -340,7 +320,9 @@ value of n, so the possible range is 0xFF00-0xFFFF.
 
 void Z80_CPU::LDH_A_ABS_n(void)
 {
-	INDIRECT_IMMEDIATE();
+	IMMEDIATE();
+	fetch();
+	set_msb_max_to_abs_addr(data);
 	fetch();
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
 }
@@ -355,7 +337,9 @@ value of n, so the possible range is 0xFF00-0xFFFF.
 
 void Z80_CPU::LDH_ABS_n_A(void)
 {
+	IMMEDIATE();
+	fetch();
+	set_msb_max_to_abs_addr(data);
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
-	INDIRECT_IMMEDIATE();
 	write(abs_addr, data);
 }

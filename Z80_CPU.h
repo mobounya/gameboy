@@ -78,6 +78,7 @@ public:
 	
 	// Helpers
 	void fetch();
+	void set_msb_max_to_abs_addr(int8_t value);
 
 	// My totally legit ram
 	std::array<int8_t, 2048> ram;
@@ -91,13 +92,11 @@ public:
 
 	// Addressing Modes
 	void IMMEDIATE();
-	void INDIRECT_IMMEDIATE();
 	void EXTENDED_ADDR();
 	void RELATIVE_ADDR();
 	void INDIRECT_REGISTER_HL();
 	void INDIRECT_REGISTER_DE();
 	void INDIRECT_REGISTER_BC();
-	void INDIRECT_REGISTER_C();
 	void WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg);
 
 	union REG
