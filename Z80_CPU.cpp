@@ -22,6 +22,13 @@ void Z80_CPU::fetch()
 	data = read(abs_addr);
 }
 
+void Z80_CPU::set_msb_max_to_abs_addr(int8_t value)
+{
+	int8_t hi = 0xFF;
+	int8_t lo = value;
+	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
+}
+
 // Totally going to return content of address
 int8_t Z80_CPU::read(int16_t address)
 {
@@ -90,15 +97,16 @@ void Z80_CPU::EXTENDED_ADDR()
 	int8_t hi;
 	int8_t lo;
 
-	hi = read(PC.value);
-	PC.value++;
 	lo = read(PC.value);
+	PC.value++;
+	hi = read(PC.value);
 	PC.value++;
 
 	abs_addr = (int16_t)hi << 8 | (int16_t)lo;
 }
 
 /*
+    !!! Not used Yet !!!
 	- Relative addressing
 	- 8-bit relative address is in the next byte of the instruction
 */
@@ -110,8 +118,8 @@ void Z80_CPU::RELATIVE_ADDR()
 }
 
 /*
-	- Register addressing (A)
-	- write or read to 8-bit register A
+	- Register addressing
+	- write or read to 8-bit register
 */
 
 void Z80_CPU::WR_REGISTER(REGISTER_ACCESS_MODE type, int8_t &reg)
@@ -253,7 +261,7 @@ void Z80_CPU::LD_ABS_DE_A(void)
 	Opcode: 0b11111010
 */
 
-void LD_A_ABS_nn(void)
+void Z80_CPU::LD_A_ABS_nn(void)
 {
 	EXTENDED_ADDR();
 	fetch();
@@ -266,9 +274,72 @@ void LD_A_ABS_nn(void)
 	Opcode: 0b11101010
 */
 
-void LD_ABS_nn_A(void)
+void Z80_CPU::LD_ABS_nn_A(void)
 {
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
 	EXTENDED_ADDR();
+	write(abs_addr, data);
+}
+
+/*
+	Instruction: LDH A, (C) 
+	Description: Load to the 8-bit A register, data from the address specified by the 8-bit C register. The full 16-bit absolute
+address is obtained by setting the most significant byte to 0xFF and the least significant byte to the value of C,
+so the possible range is 0xFF00-0xFFFF.
+	Opcode: 0b11110010
+*/
+void Z80_CPU::LDH_A_ABS_C(void)
+{
+	set_msb_max_to_abs_addr(BC.lo);
+	fetch();
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
+}
+
+/*
+	Instruction: LDH (C), A 
+	Description: Load to the address specified by the 8-bit C register, data from the 8-bit A register. The full 16-bit absolute
+address is obtained by setting the most significant byte to 0xFF and the least significant byte to the value of C,
+so the possible range is 0xFF00-0xFFFF.
+	Opcode: 0b11100010
+*/
+
+void Z80_CPU::LDH_ABS_C_A(void)
+{
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
+	set_msb_max_to_abs_addr(BC.lo);
+	write(abs_addr, data);
+}
+
+/*
+	Instruction: LDH A, (n)
+	Description: Load to the 8-bit A register, data from the address specified by the 8-bit immediate data n. The full 16-bit
+absolute address is obtained by setting the most significant byte to 0xFF and the least significant byte to the
+value of n, so the possible range is 0xFF00-0xFFFF.
+	Opcode: 0b11110000
+*/
+
+void Z80_CPU::LDH_A_ABS_n(void)
+{
+	IMMEDIATE();
+	fetch();
+	set_msb_max_to_abs_addr(data);
+	fetch();
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
+}
+
+/*
+	Instruction: LDH (n), A
+	Description: Load to the address specified by the 8-bit immediate data n, data from the 8-bit A register. The full 16-bit
+absolute address is obtained by setting the most significant byte to 0xFF and the least significant byte to the
+value of n, so the possible range is 0xFF00-0xFFFF.
+	Opcode: 0b11100000
+*/
+
+void Z80_CPU::LDH_ABS_n_A(void)
+{
+	IMMEDIATE();
+	fetch();
+	set_msb_max_to_abs_addr(data);
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
 	write(abs_addr, data);
 }
