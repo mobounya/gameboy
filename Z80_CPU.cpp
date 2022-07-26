@@ -329,9 +329,12 @@ void Z80_CPU::LDH_A_ABS_n(void)
 
 /*
 	Instruction: LDH (n), A
-	Description: Load to the address specified by the 8-bit immediate data n, data from the 8-bit A register. The full 16-bit
-absolute address is obtained by setting the most significant byte to 0xFF and the least significant byte to the
-value of n, so the possible range is 0xFF00-0xFFFF.
+	
+	Description:
+	Load to the address specified by the 8-bit immediate data n, data from the 8-bit A register. The full 16-bit
+	absolute address is obtained by setting the most significant byte to 0xFF and the least significant byte to the
+	value of n, so the possible range is 0xFF00-0xFFFF.
+	
 	Opcode: 0b11100000
 */
 
@@ -342,4 +345,22 @@ void Z80_CPU::LDH_ABS_n_A(void)
 	set_msb_max_to_abs_addr(data);
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
 	write(abs_addr, data);
+}
+
+/*
+	Instruction: LD A, (HL+)
+	
+	Description:
+	Load to the 8-bit A register, data from the absolute address specified by the 16-bit register HL. The value of HL is incremented after the memory read.
+	
+	Opcode: 0b00101010
+*/
+
+void Z80_CPU::LD_A_ABS_INCREMENT_HL(void)
+{
+	std::cout << "called LD_A_ABS_INCREMENT_HL" << std::endl;
+	INDIRECT_REGISTER_HL();
+	fetch();
+	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
+	HL.value++;
 }
