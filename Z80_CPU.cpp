@@ -358,7 +358,6 @@ void Z80_CPU::LDH_ABS_n_A(void)
 
 void Z80_CPU::LD_A_ABS_INCREMENT_HL(void)
 {
-	std::cout << "called LD_A_ABS_INCREMENT_HL" << std::endl;
 	INDIRECT_REGISTER_HL();
 	fetch();
 	WR_REGISTER(REGISTER_ACCESS_MODE::WRITE, AF.hi);
