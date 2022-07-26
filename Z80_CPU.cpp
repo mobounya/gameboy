@@ -343,3 +343,20 @@ void Z80_CPU::LDH_ABS_n_A(void)
 	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
 	write(abs_addr, data);
 }
+
+/*
+	Instruction: LD (HL+), A
+	
+	Description:
+	Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register. The value of HL is incremented after the memory write.
+	
+	Opcode: 0b00100010
+*/
+
+void Z80_CPU::LD_ABS_INCREMENT_HL_A(void)
+{
+	WR_REGISTER(REGISTER_ACCESS_MODE::READ, AF.hi);
+	INDIRECT_REGISTER_HL();
+	write(abs_addr, data);
+	HL.value++;
+}

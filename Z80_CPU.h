@@ -56,7 +56,7 @@ public:
 		{0x12, &Z80_CPU::LD_ABS_DE_A}, {0xFA, &Z80_CPU::LD_A_ABS_nn},
 		{0xEA, &Z80_CPU::LD_ABS_nn_A}, {0xF2, &Z80_CPU::LDH_A_ABS_C},
 		{0xE2, &Z80_CPU::LDH_ABS_C_A}, {0xF0, &Z80_CPU::LDH_A_ABS_n},
-		{0xE0, &Z80_CPU::LDH_ABS_n_A},
+		{0xE0, &Z80_CPU::LDH_ABS_n_A}, {0x22, &Z80_CPU::LD_ABS_INCREMENT_HL_A}
 	};
 
 	// 8-bit instructions
@@ -75,7 +75,7 @@ public:
 	void LDH_ABS_C_A(void);
 	void LDH_A_ABS_n(void);
 	void LDH_ABS_n_A(void);
-	
+	void LD_ABS_INCREMENT_HL_A(void);
 	// Helpers
 	void fetch();
 	void set_msb_max_to_abs_addr(int8_t value);
