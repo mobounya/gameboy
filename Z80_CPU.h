@@ -56,7 +56,7 @@ public:
 		{0x12, &Z80_CPU::LD_ABS_DE_A}, {0xFA, &Z80_CPU::LD_A_ABS_nn},
 		{0xEA, &Z80_CPU::LD_ABS_nn_A}, {0xF2, &Z80_CPU::LDH_A_ABS_C},
 		{0xE2, &Z80_CPU::LDH_ABS_C_A}, {0xF0, &Z80_CPU::LDH_A_ABS_n},
-		{0xE0, &Z80_CPU::LDH_ABS_n_A}, {0x22, &Z80_CPU::LD_A_ABS_INCREMENT_HL}
+		{0xE0, &Z80_CPU::LDH_ABS_n_A}, {0xA2, &Z80_CPU::LD_A_ABS_INCREMENT_HL}
 	};
 
 	// 8-bit instructions
