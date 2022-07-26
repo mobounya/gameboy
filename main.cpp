@@ -17,7 +17,7 @@ void print_registers(Z80_CPU cpu)
     std::cout << std::endl;
 }
 
-bool exec_opcode(Z80_CPU cpu, int opcode) {
+bool exec_opcode(Z80_CPU &cpu, int opcode) {
     auto search_r_r = cpu.opcodes_ld_r_r.find(opcode);
     if (search_r_r != cpu.opcodes_ld_r_r.end()) {
         std::cout << "Hello From REGISTER TO REGISTER" << std::endl;
